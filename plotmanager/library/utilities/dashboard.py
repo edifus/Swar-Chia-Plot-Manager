@@ -17,19 +17,33 @@ chia_location, log_directory, config_jobs, manager_check_interval, max_concurren
     minimum_minutes_between_jobs, progress_settings, notification_settings, debug_level, view_settings, \
     instrumentation_settings, dashboard_settings = get_config_info()
 
+# dashboard logging
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+dashboard_logging = extra_logger('dashboard_logs', 'dashboard.log')
+
+def extra_logger(name, log_file, level=logging.INFO):
+    handler = logging.FileHandler(log_file)        
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler)
+
+    return logger
+# end dashboard logging
+
 def dashboard_thread():
     newThread = threading.Thread(target=dashboard_update_loop, args=())
     newThread.start()
 
 def dashboard_update_loop():
-    logging.basicConfig(filename='dashboard.log', format='%(asctime)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG, force=True)
     try:
         while True:
-            logging.debug("getting job data", flush=True)
+            dashboard_logging.info('Updating dashboard ...', flush=True)
             update_dashboard()
-            logging.debug("sleeping 60", flush=True)
+            dashboard_logging.info('Sleeping 60 seconds ...', flush=True)
             time.sleep(60)
-            logging.debug("waking up", flush=True)
+            dashboard_logging.info('Waking up ...', flush=True)
     except:
         sys.exit()
 
@@ -68,7 +82,6 @@ def _get_row_info(pid, running_work):
     return [str(cell) for cell in row]
 
 def get_job_data(jobs, running_work, analysis):
-    logging.basicConfig(filename='dashboard.log', format='%(asctime)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG, force=True)
     rows = []
     added_pids = []
     for job in jobs:
@@ -85,7 +98,7 @@ def get_job_data(jobs, running_work, analysis):
     rows.sort(key=lambda x: (x[4]), reverse=True)
     for i in range(len(rows)):
         rows[i] = [str(i+1)] + rows[i]
-    logging.debug("updating dashboard", flush=True)
+    dashboard_logging.info("Connecting to dashboard ...", flush=True)
     dashboard_request(plots = rows, analysis=analysis)
 
 
@@ -119,24 +132,24 @@ def dashboard_request(plots, analysis):
         'Authorization': "Bearer " + dashboard_settings.get('dashboard_api_key'),
         'Content-Type': 'application/json'
     }
-    logging.basicConfig(filename='dashboard.log', format='%(asctime)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG, force=True)
+    logging.basicConfig(filename='dashboard.log', format='%(asctime)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=debug_level, force=True)
     try:
         response = requests.patch(url, headers=headers, data=data)
         if response.status_code == 204:
             dashboard_status = "Connected"
         elif  response.status_code == 429:
             dashboard_status = "Too many Requests. Slow down."
-            logging.warning(dashboard_status + str(response))
+            dashboard_logging.info(dashboard_status + str(response))
         else:
             response.raise_for_status()
     except HTTPError:
         if response.status_code == 401:
             dashboard_status = "Unauthorized. Possibly invalid API key?"
-            logging.warning(dashboard_status + str(response))
+            dashboard_logging.info(dashboard_status + str(response))
         else:
             dashboard_status = "Unable to connect."
-            logging.warning(dashboard_status + str(response))
+            dashboard_logging.info(dashboard_status + str(response))
     except requests.exceptions.ConnectionError:
         dashboard_status = "Connection Error. Chia Dashboard may not be responding."
-        logging.warning(dashboard_status)
+        dashboard_logging.info(dashboard_status)
     return dashboard_status
