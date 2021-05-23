@@ -14,8 +14,10 @@ from plotmanager.library.utilities.processes import get_running_plots
 from plotmanager.library.utilities.print import _get_row_info
 
 chia_location, log_directory, config_jobs, manager_check_interval, max_concurrent, max_for_phase_1, \
-    minimum_minutes_between_jobs, progress_settings, notification_settings, log_level, view_settings, \
+    minimum_minutes_between_jobs, progress_settings, notification_settings, debug_level, view_settings, \
     instrumentation_settings, dashboard_settings = get_config_info()
+
+logging.basicConfig(filename='dashboard.log', format='%(asctime)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG, force=True)
 
 def dashboard_thread():
     newThread = threading.Thread(target=update_dashboard, args=())
@@ -33,8 +35,11 @@ def update_dashboard():
                         notification_settings=notification_settings, view_settings=view_settings,
                         instrumentation_settings=instrumentation_settings)
     get_job_data(jobs=jobs, running_work=running_work, analysis=analysis)
-    update_dashboard()
+    logging.debug(f"Jobs: {jobs}, Running Work: {running work}")
+    #update_dashboard()   # calling itself?
+    logging.debug(f"sleeping 60")
     time.sleep(60) #setting this too low can cause problems. recommended 60
+    logging.debug(f"waking up")
 
 def _get_row_info(pid, running_work):
     work = running_work[pid]
@@ -58,6 +63,7 @@ def _get_row_info(pid, running_work):
     return [str(cell) for cell in row]
 
 def get_job_data(jobs, running_work, analysis):
+    logging.debug(f"getting job data")
     rows = []
     added_pids = []
     for job in jobs:
@@ -74,6 +80,7 @@ def get_job_data(jobs, running_work, analysis):
     rows.sort(key=lambda x: (x[4]), reverse=True)
     for i in range(len(rows)):
         rows[i] = [str(i+1)] + rows[i]
+    logging.debug(f"updating dashboard")
     dashboard_request(plots = rows, analysis=analysis)
 
 
@@ -107,7 +114,7 @@ def dashboard_request(plots, analysis):
         'Authorization': "Bearer " + dashboard_settings.get('dashboard_api_key'),
         'Content-Type': 'application/json'
     }
-    logging.basicConfig(filename='dashboard.log', format='%(asctime)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.WARNING, force=True)
+    #logging.basicConfig(filename='dashboard.log', format='%(asctime)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG, force=True)
     try:
         response = requests.patch(url, headers=headers, data=data)
         if response.status_code == 204:
