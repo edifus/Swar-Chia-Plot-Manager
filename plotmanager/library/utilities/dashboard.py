@@ -18,7 +18,7 @@ chia_location, log_directory, config_jobs, manager_check_interval, max_concurren
     instrumentation_settings, dashboard_settings = get_config_info()
 
 # dashboard logging
-def extra_logger(name, log_file, level=logging.INFO):
+def extra_logger(name, log_file, level=debug_level):
     handler = logging.FileHandler(log_file)        
     handler.setFormatter(formatter)
 
@@ -28,7 +28,7 @@ def extra_logger(name, log_file, level=logging.INFO):
 
     return logger
 
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s', '%Y-%m-%d %H:%M:%S')
 dashboard_logging = extra_logger('dashboard_logs', 'dashboard.log')
 # end dashboard logging
 
@@ -39,11 +39,8 @@ def dashboard_thread():
 def dashboard_update_loop():
     try:
         while True:
-            dashboard_logging.info('Updating dashboard ...')
             update_dashboard()
-            dashboard_logging.info('Sleeping 60 seconds ...')
             time.sleep(60)
-            dashboard_logging.info('Waking up ...')
     except:
         sys.exit()
 
@@ -98,7 +95,6 @@ def get_job_data(jobs, running_work, analysis):
     rows.sort(key=lambda x: (x[4]), reverse=True)
     for i in range(len(rows)):
         rows[i] = [str(i+1)] + rows[i]
-    dashboard_logging.info("Connecting to dashboard ...")
     dashboard_request(plots = rows, analysis=analysis)
 
 
