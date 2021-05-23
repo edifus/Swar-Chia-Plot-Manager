@@ -39,8 +39,11 @@ def dashboard_thread():
 def dashboard_update_loop():
     try:
         while True:
+            dashboard_logging.info("Starting update ...")
             update_dashboard()
+            dashboard_logging.debug("Sleeping 60 seconds ...")
             time.sleep(60)
+            dashboard_logging.debug("Waking up ...")
     except:
         sys.exit()
 
@@ -95,6 +98,7 @@ def get_job_data(jobs, running_work, analysis):
     rows.sort(key=lambda x: (x[4]), reverse=True)
     for i in range(len(rows)):
         rows[i] = [str(i+1)] + rows[i]
+    dashboard_logging.debug("Sending Dashbaord update ...")
     dashboard_request(plots = rows, analysis=analysis)
 
 
@@ -133,19 +137,20 @@ def dashboard_request(plots, analysis):
         response = requests.patch(url, headers=headers, data=data)
         if response.status_code == 204:
             dashboard_status = "Connected"
+            dashboard_logging.info("Successfully updated endpoint: %s - ", url + str(response))
         elif  response.status_code == 429:
-            dashboard_status = "Too many Requests. Slow down."
-            dashboard_logging.info(dashboard_status + str(response))
+            dashboard_status = "Too many Requests. Slow down. - "
+            dashboard_logging.warning(dashboard_status + str(response))
         else:
             response.raise_for_status()
     except HTTPError:
         if response.status_code == 401:
-            dashboard_status = "Unauthorized. Possibly invalid API key?"
-            dashboard_logging.info(dashboard_status + str(response))
+            dashboard_status = "Unauthorized. Possibly invalid API key? - "
+            dashboard_logging.warning(dashboard_status + str(response))
         else:
-            dashboard_status = "Unable to connect."
-            dashboard_logging.info(dashboard_status + str(response))
+            dashboard_status = "Unable to connect. - "
+            dashboard_logging.error(dashboard_status + str(response))
     except requests.exceptions.ConnectionError:
         dashboard_status = "Connection Error. Chia Dashboard may not be responding."
-        dashboard_logging.info(dashboard_status)
+        dashboard_logging.error(dashboard_status)
     return dashboard_status
