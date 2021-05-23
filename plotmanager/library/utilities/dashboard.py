@@ -18,7 +18,7 @@ chia_location, log_directory, config_jobs, manager_check_interval, max_concurren
     instrumentation_settings, dashboard_settings = get_config_info()
 
 # begin dashboard logging
-def extra_logger(name, log_file, level=debug_level):
+def new_logger(name, log_file, level=debug_level):
     handler = logging.FileHandler(log_file)        
     handler.setFormatter(formatter)
 
@@ -28,8 +28,8 @@ def extra_logger(name, log_file, level=debug_level):
 
     return logger
 
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s', '%Y-%m-%d %H:%M:%S')
-dashboard_logging = extra_logger('dashboard_logs', 'dashboard.log')
+formatter = logging.Formatter('%(asctime)s [%(levelname)s]: %(message)s', '%Y-%m-%d %H:%M:%S')
+dashboard_logging = new_logger('dashboard', 'dashboard.log')
 # end dashboard logging
 
 def dashboard_thread():
@@ -143,7 +143,7 @@ def dashboard_request(plots, analysis):
     except HTTPError:
         if response.status_code == 401:
             dashboard_status = "Unauthorized. Possibly invalid API key?"
-            dashboard_logging.warning(dashboard_status + str(response))
+            dashboard_logging.error(dashboard_status + str(response))
         else:
             dashboard_status = "Unable to connect."
             dashboard_logging.error(dashboard_status + str(response))
