@@ -39,13 +39,14 @@ def dashboard_thread():
 def dashboard_update_loop():
     try:
         while True:
-            dashboard_logging.debug("Starting update ...")
+            dashboard_logging.debug("... starting update ...")
             update_dashboard()
-            dashboard_logging.debug("Sleeping 60 seconds ...")
+            dashboard_logging.debug("... sleeping 60 seconds ...")
             time.sleep(60)
-            dashboard_logging.debug("Waking up ...")
+            dashboard_logging.debug("... waking up ...")
     except:
-        sys.exit()
+        dashboard_logging.error("Exception occurred: " + sys.exc_info())
+        pass
 
 def update_dashboard():
     analysis = {'files': {}}
@@ -97,7 +98,7 @@ def get_job_data(jobs, running_work, analysis):
     rows.sort(key=lambda x: (x[4]), reverse=True)
     for i in range(len(rows)):
         rows[i] = [str(i+1)] + rows[i]
-    dashboard_logging.debug("Sending Dashboard update ...")
+    dashboard_logging.debug("... sending dashboard update ...")
     dashboard_request(plots = rows, analysis=analysis)
 
 def set_dashboard_data(plots):
