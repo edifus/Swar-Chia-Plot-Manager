@@ -39,11 +39,11 @@ def dashboard_thread():
 def dashboard_update_loop():
     try:
         while True:
-            dashboard_logging.info('Updating dashboard ...', flush=True)
+            dashboard_logging.info('Updating dashboard ...')
             update_dashboard()
-            dashboard_logging.info('Sleeping 60 seconds ...', flush=True)
+            dashboard_logging.info('Sleeping 60 seconds ...')
             time.sleep(60)
-            dashboard_logging.info('Waking up ...', flush=True)
+            dashboard_logging.info('Waking up ...')
     except:
         sys.exit()
 
@@ -98,7 +98,7 @@ def get_job_data(jobs, running_work, analysis):
     rows.sort(key=lambda x: (x[4]), reverse=True)
     for i in range(len(rows)):
         rows[i] = [str(i+1)] + rows[i]
-    dashboard_logging.info("Connecting to dashboard ...", flush=True)
+    dashboard_logging.info("Connecting to dashboard ...")
     dashboard_request(plots = rows, analysis=analysis)
 
 
