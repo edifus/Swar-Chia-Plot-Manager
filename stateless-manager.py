@@ -82,7 +82,7 @@ if minimum_minutes_between_jobs and len(running_work.keys()) > 0:
         logging.info(f'Setting a new stagger for {job_name}. minimum_minutes_between_jobs is larger than assigned '
                      f'stagger. Minimum: {minimum_stagger}, Current: {next_job_work[job_name]}')
 
-if dashboard_settings.get('update_dashboard'):
+if dashboard_settings.get('dashboard_update'):
     dashboard_thread()
 
 logging.info(f'Starting loop.')
