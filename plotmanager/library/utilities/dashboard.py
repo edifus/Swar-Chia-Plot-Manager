@@ -18,7 +18,7 @@ chia_location, log_directory, config_jobs, manager_check_interval, max_concurren
     instrumentation_settings, dashboard_settings = get_config_info()
 
 def dashboard_thread():
-    newThread = threading.Thread(target=update_dashboard_loop, args=())
+    newThread = threading.Thread(target=dashboard_update_loop, args=())
     newThread.start()
 
 def dashboard_update_loop():
