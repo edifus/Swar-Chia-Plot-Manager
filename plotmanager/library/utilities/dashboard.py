@@ -18,9 +18,6 @@ chia_location, log_directory, config_jobs, manager_check_interval, max_concurren
     instrumentation_settings, dashboard_settings = get_config_info()
 
 # dashboard logging
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-dashboard_logging = extra_logger('dashboard_logs', 'dashboard.log')
-
 def extra_logger(name, log_file, level=logging.INFO):
     handler = logging.FileHandler(log_file)        
     handler.setFormatter(formatter)
@@ -30,6 +27,9 @@ def extra_logger(name, log_file, level=logging.INFO):
     logger.addHandler(handler)
 
     return logger
+
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+dashboard_logging = extra_logger('dashboard_logs', 'dashboard.log')
 # end dashboard logging
 
 def dashboard_thread():
