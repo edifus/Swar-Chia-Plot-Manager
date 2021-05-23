@@ -13,7 +13,7 @@ from plotmanager.library.utilities.log import analyze_log_dates, check_log_progr
 from plotmanager.library.utilities.processes import get_running_plots
 from plotmanager.library.utilities.print import _get_row_info
 
-chia_location, log_directory, jobs, manager_check_interval, max_concurrent, max_for_phase_1, \
+chia_location, log_directory, config_jobs, manager_check_interval, max_concurrent, max_for_phase_1, \
     minimum_minutes_between_jobs, progress_settings, notification_settings, log_level, view_settings, \
     instrumentation_settings, dashboard_settings = get_config_info()
 
@@ -26,7 +26,7 @@ def update_dashboard():
     analysis = {'files': {}}
     running_work = {}
     analysis = analyze_log_dates(log_directory=log_directory, analysis=analysis)
-    jobs = load_jobs(jobs)
+    jobs = load_jobs(config_jobs)
     jobs, running_work = get_running_plots(jobs=jobs, running_work=running_work)
     check_log_progress(jobs=jobs, running_work=running_work, progress_settings=progress_settings,
                         notification_settings=notification_settings, view_settings=view_settings)
