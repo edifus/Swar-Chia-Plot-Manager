@@ -186,6 +186,13 @@ List of Metrics Gathered
 - **chia_running_plots**: A [Gauge](https://prometheus.io/docs/concepts/metric_types/#gauge) to see how many plots are currently being created.
 - **chia_completed_plots**: A [Counter](https://prometheus.io/docs/concepts/metric_types/#counter) for completed plots.
 
+### dashboard
+
+These are the settings to have the plot manager report jobs to a Chia Dashboard service.
+* `dashboard_update` - This can be true/false to configure chia-dashboard export
+* `dashboard_update_url` - This can be changed to point anywhere running Chia Dashboard. https://<chia-dashboard-service>/api/satellite
+* `dashboard_api_key` - This is the api supplied when you created the satellite.
+
 ### progress
 
 * `phase_line_end` - These are the settings that will be used to dictate when a phase ends in the progress bar. It is supposed to reflect the line at which the phase will end so the progress calculations can use that information with the existing log file to calculate a progress percent. 
