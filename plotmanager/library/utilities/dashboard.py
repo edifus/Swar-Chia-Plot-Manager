@@ -17,7 +17,7 @@ chia_location, log_directory, config_jobs, manager_check_interval, max_concurren
     minimum_minutes_between_jobs, progress_settings, notification_settings, debug_level, view_settings, \
     instrumentation_settings, dashboard_settings = get_config_info()
 
-# dashboard logging
+# begin dashboard logging
 def extra_logger(name, log_file, level=debug_level):
     handler = logging.FileHandler(log_file)        
     handler.setFormatter(formatter)
@@ -58,7 +58,6 @@ def update_dashboard():
                         notification_settings=notification_settings, view_settings=view_settings,
                         instrumentation_settings=instrumentation_settings)
     get_job_data(jobs=jobs, running_work=running_work, analysis=analysis)
-
 
 def _get_row_info(pid, running_work):
     work = running_work[pid]
@@ -101,7 +100,6 @@ def get_job_data(jobs, running_work, analysis):
     dashboard_logging.debug("Sending Dashboard update ...")
     dashboard_request(plots = rows, analysis=analysis)
 
-
 def set_dashboard_data(plots):
     data = []
     for plot in plots:
@@ -115,7 +113,6 @@ def set_dashboard_data(plots):
         }
         data.append(arr)
     return data
-
 
 def dashboard_request(plots, analysis):
 
@@ -132,7 +129,6 @@ def dashboard_request(plots, analysis):
         'Authorization': "Bearer " + dashboard_settings.get('dashboard_api_key'),
         'Content-Type': 'application/json'
     }
-    #logging.basicConfig(filename='dashboard.log', format='%(asctime)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=debug_level, force=True)
     try:
         response = requests.patch(url, headers=headers, data=data)
         if response.status_code == 204:
