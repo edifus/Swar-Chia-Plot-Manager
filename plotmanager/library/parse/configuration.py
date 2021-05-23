@@ -148,7 +148,7 @@ def get_config_info():
     log_directory = _get_log_settings(config=config)
     if not os.path.exists(log_directory):
         os.makedirs(log_directory)
-    config_jobs = _get_jobs(config=config)
+    jobs = _get_jobs(config=config)
     max_concurrent, max_for_phase_1, minimum_minutes_between_jobs = _get_global_config(config=config)
     progress_settings = _get_progress_settings(config=config)
     notification_settings = _get_notifications_settings(config=config)
@@ -156,6 +156,6 @@ def get_config_info():
     instrumentation_settings = _get_instrumentation_settings(config=config)
     dashboard_settings = _get_dashboard_settings(config=config)
 
-    return chia_location, log_directory, config_jobs, manager_check_interval, max_concurrent, max_for_phase_1, \
+    return chia_location, log_directory, jobs, manager_check_interval, max_concurrent, max_for_phase_1, \
         minimum_minutes_between_jobs, progress_settings, notification_settings, log_level, view_settings, \
         instrumentation_settings, dashboard_settings
