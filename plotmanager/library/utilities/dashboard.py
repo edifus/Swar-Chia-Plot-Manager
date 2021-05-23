@@ -132,7 +132,7 @@ def dashboard_request(plots, analysis):
         'Authorization': "Bearer " + dashboard_settings.get('dashboard_api_key'),
         'Content-Type': 'application/json'
     }
-    logging.basicConfig(filename='dashboard.log', format='%(asctime)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=debug_level, force=True)
+    #logging.basicConfig(filename='dashboard.log', format='%(asctime)s:%(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=debug_level, force=True)
     try:
         response = requests.patch(url, headers=headers, data=data)
         if response.status_code == 204:
