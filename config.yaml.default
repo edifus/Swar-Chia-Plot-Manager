@@ -86,7 +86,7 @@ dashboard:
   #                       choose us or eu for more reliable reporting. Make sure the url has /api/satellite at the end. I will fix
   #                       this in a later release. Ex: https://us.chiadashboard.com/api/satellite
   #
-  update_dashboard: false
+  dashboard_update: false
   dashboard_update_url: https://us.chiadashboard.com/api/satellite
   dashboard_api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
