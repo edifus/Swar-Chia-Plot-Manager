@@ -79,6 +79,16 @@ instrumentation:
   prometheus_enabled: false
   prometheus_port: 9090
 
+dashboard:
+  # These are the settings to have the plot manager report jobs to the Chia Dashboard (https://chiadashboard.com)
+  #
+  # dashboard_update_url: This can be changed to point anywhere running Chia Dashboard. If using chiadashboard.com,
+  #                       choose us or eu for more reliable reporting. Make sure the url has /api/satellite at the end. I will fix
+  #                       this in a later release. Ex: https://us.chiadashboard.com/api/satellite
+  #
+  update_dashboard: false
+  dashboard_update_url: https://us.chiadashboard.com/api/satellite
+  dashboard_api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 progress:
   # phase_line_end: These are the settings that will be used to dictate when a phase ends in the progress bar. It is
