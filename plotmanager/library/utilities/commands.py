@@ -16,6 +16,7 @@ from plotmanager.library.utilities.notifications import send_notifications
 from plotmanager.library.utilities.print import print_view, print_json
 from plotmanager.library.utilities.processes import is_windows, get_manager_processes, get_running_plots, \
     start_process, identify_drive, get_system_drives
+from plotmanager.library.utilities.dashboard import update_dashboard
 
 
 def start_manager():
@@ -167,6 +168,8 @@ def view(loop=True):
             print_view(jobs=jobs, running_work=running_work, analysis=analysis, drives=drives,
                        next_log_check=datetime.now() + timedelta(seconds=view_check_interval),
                        view_settings=view_settings, loop=loop)
+            if not get_manager_processes():
+                update_dashboard()
             if not loop:
                 break
             time.sleep(view_check_interval)
