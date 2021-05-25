@@ -108,7 +108,8 @@ while has_active_jobs_and_work(jobs):
     )
 
     # chia-dashboard
-    update_dashboard()
+    if dashboard_settings.get('dashboard_update'):
+        update_dashboard()
 
     logging.info(f'Sleeping for {manager_check_interval} seconds.')
     time.sleep(manager_check_interval)
