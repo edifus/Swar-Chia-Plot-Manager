@@ -134,7 +134,7 @@ def dashboard_request(plots, analysis):
         response = requests.patch(url, headers=headers, data=data)
         if response.status_code == 204:
             dashboard_status = "Connected"
-            dashboard_logging.info("Successfully updated endpoint: %s", url)
+            dashboard_logging.debug("Successfully updated endpoint: %s", url)
         elif  response.status_code == 429:
             dashboard_status = "Too many Requests. Slow down."
             dashboard_logging.warning(dashboard_status + str(response))
