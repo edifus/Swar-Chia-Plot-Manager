@@ -168,8 +168,9 @@ def view(loop=True):
             print_view(jobs=jobs, running_work=running_work, analysis=analysis, drives=drives,
                        next_log_check=datetime.now() + timedelta(seconds=view_check_interval),
                        view_settings=view_settings, loop=loop)
-            if not get_manager_processes():
-                update_dashboard()
+            if dashboard_settings.get('dashboard_update'):
+                if not get_manager_processes():
+                    update_dashboard()
             if not loop:
                 break
             time.sleep(view_check_interval)
