@@ -7,7 +7,6 @@ from plotmanager.library.parse.configuration import get_config_info
 from plotmanager.library.utilities.jobs import has_active_jobs_and_work, load_jobs, monitor_jobs_to_start
 from plotmanager.library.utilities.log import check_log_progress
 from plotmanager.library.utilities.processes import get_running_plots, get_system_drives
-#from plotmanager.library.utilities.dashboard import dashboard_thread
 from plotmanager.library.utilities.dashboard import update_dashboard
 
 
@@ -83,8 +82,6 @@ if minimum_minutes_between_jobs and len(running_work.keys()) > 0:
         logging.info(f'Setting a new stagger for {job_name}. minimum_minutes_between_jobs is larger than assigned '
                      f'stagger. Minimum: {minimum_stagger}, Current: {next_job_work[job_name]}')
 
-#if dashboard_settings.get('dashboard_update'):
-#    dashboard_thread()
 
 logging.info(f'Starting loop.')
 while has_active_jobs_and_work(jobs):

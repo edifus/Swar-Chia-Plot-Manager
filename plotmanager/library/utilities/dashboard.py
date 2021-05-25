@@ -1,7 +1,6 @@
 import os
 import json
 import requests
-import threading
 import time
 import logging
 
@@ -31,20 +30,6 @@ def new_logger(name, log_file, level=debug_level):
 formatter = logging.Formatter('%(asctime)s [%(levelname)s]: %(message)s', '%Y-%m-%d %H:%M:%S')
 dashboard_logging = new_logger('dashboard', 'dashboard.log')
 # end dashboard logging
-
-#def dashboard_thread():
-#    newThread = threading.Thread(target=dashboard_update_loop, args=())
-#    newThread.start()
-
-
-#def dashboard_update_loop():
-#    try:
-#        while True:
-#            update_dashboard()
-#            time.sleep(60)
-#    except:
-#        dashboard_logging.error("Exception occurred: " + sys.exc_info())
-#        pass
 
 
 def update_dashboard():
